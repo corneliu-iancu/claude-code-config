@@ -1,40 +1,25 @@
-# Claude Code Configuration Template
+# Claude Code Config
 
-## What This Is
-
-A reusable Claude Code configuration template with automatic session notes tracking and sound notifications.
-
-## Quick Facts
-
-- **Purpose**: Per-project Claude Code configuration
-- **Hooks**: Session notes (PostToolUse), Sound notifications (Stop, Notification, TaskCompleted)
-- **Requirements**: macOS, `uv`, AWS Bedrock access
+Personal global Claude Code setup: sound notifications + automatic session notes via AWS Bedrock.
 
 ## Structure
 
 ```
-.claude/
-├── settings.json        # Main configuration
-├── agents/              # AI assistants (empty template)
-├── commands/            # Slash commands (empty template)  
-├── hooks/               # Hook scripts
-│   ├── session-notes-wrapper.sh
-│   ├── session-notes.py
-│   └── session-notes.conf.json
-├── skills/              # Domain knowledge (empty template)
-└── rules/               # Modular instructions (empty template)
+install.sh                          # Merges hooks into ~/.claude/settings.json
+settings-template.json              # Hook definitions (reference copy)
+play-sound.sh                       # afplay wrapper
+sounds/                             # heart-beat.mp3, cinematic-boom.wav, cash-register.mp3
+.claude/hooks/
+  session-notes-wrapper.sh          # Captures stdin, backgrounds Python
+  session-notes.py                  # Parses transcript, calls Bedrock
+  session-notes.conf.json           # notes_path, model_id, enabled, etc.
 ```
 
-## Key Files
+## How Install Works
 
-### `.claude/settings.json`
-Configures the PostToolUse hook for automatic session notes.
+`install.sh` deep-merges hook definitions into `~/.claude/settings.json` using `jq`. Hook commands reference this repo by absolute path.
 
-### `.claude/hooks/session-notes.conf.json`
-- `notes_path` - Where notes are saved
-- `enabled` - Turn on/off
-- `min_transcript_messages` - Skip trivial sessions
+## Hook Events
 
-## Usage
-
-Copy `.claude/` directory into your project and customize for your needs.
+- **Notification** / **Stop** / **TaskCompleted** — play sounds via `play-sound.sh`
+- **SessionEnd** — runs `session-notes-wrapper.sh` to summarize the conversation
