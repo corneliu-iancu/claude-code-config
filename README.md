@@ -2,9 +2,9 @@
   <img src="assets/banner.png" alt="Claude Code Configuration" width="100%">
 </p>
 
-# Claude Code Config
+# Claude Code Hooks
 
-Global [Claude Code](https://docs.anthropic.com/en/docs/claude-code) configuration — sound effects + automatic session notes.
+Global [Claude Code](https://docs.anthropic.com/en/docs/claude-code) hooks — sound effects + automatic session notes.
 
 ## What's Included
 
@@ -20,13 +20,13 @@ Hooks installed into `~/.claude/settings.json` that play sounds via `afplay`:
 
 ### Session Notes
 
-On `SessionEnd`, a background script summarizes the conversation transcript using AWS Bedrock and writes a markdown note to `~/Documents/LLM Engineering Notes/`. Trivial sessions (fewer than 4 user messages) are skipped.
+On `SessionEnd`, a background script summarizes the conversation transcript using an LLM and writes a markdown note to `~/Documents/LLM Engineering Notes/`. Trivial sessions (fewer than 4 user messages) are skipped. Supports Anthropic and AWS Bedrock — auto-detected from environment variables.
 
 ## Install
 
 ```bash
-git clone https://github.com/corneliu-iancu/claude-code-config.git
-cd claude-code-config
+git clone https://github.com/corneliu-iancu/claude-code-hooks.git
+cd claude-code-hooks
 ./install.sh
 ```
 
@@ -35,10 +35,10 @@ cd claude-code-config
 ## Repo Structure
 
 ```
-claude-code-config/
+claude-code-hooks/
 ├── install.sh                  # Merges hooks into ~/.claude/settings.json
 ├── settings-template.json      # Hook definitions (reference copy)
-├── play-sound.sh               # afplay wrapper (never blocks, never fails)
+├── play-sound.sh               # Sound player wrapper (never blocks, never fails)
 ├── sounds/
 │   ├── heart-beat.mp3
 │   ├── cinematic-boom.wav
@@ -46,7 +46,7 @@ claude-code-config/
 ├── .claude/
 │   └── hooks/
 │       ├── session-notes-wrapper.sh   # Captures stdin, backgrounds Python
-│       ├── session-notes.py           # Parses transcript, calls Bedrock
+│       ├── session-notes.py           # Parses transcript, calls Anthropic or Bedrock
 │       └── session-notes.conf.json    # Session notes configuration
 ├── assets/
 │   └── banner.png
@@ -78,7 +78,7 @@ Provider auto-detection checks for `ANTHROPIC_API_KEY` first, then `AWS_BEARER_T
 
 ## Requirements
 
-- **macOS** — sounds use `afplay`
+- **macOS** — sounds use `afplay`; **Linux** — sounds use `mpg123`/`ffplay` (MP3) or `aplay`/`paplay` (WAV)
 - **`jq`** — used by `install.sh` to merge JSON (`brew install jq`)
 - **Anthropic API key or AWS Bedrock credentials** — for session notes summarization
 
