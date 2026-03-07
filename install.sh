@@ -40,17 +40,6 @@ HOOKS=$(cat <<EOF
         ]
       }
     ],
-    "TaskCompleted": [
-      {
-        "matcher": "",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "$REPO_DIR/play-sound.sh cash-register.mp3"
-          }
-        ]
-      }
-    ],
     "SessionEnd": [
       {
         "matcher": "",

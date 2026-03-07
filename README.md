@@ -16,7 +16,6 @@ Hooks installed into `~/.claude/settings.json` that play sounds via `afplay`:
 |-------|-------|------|
 | `Notification` | `heart-beat.mp3` | Claude needs attention |
 | `Stop` | `cinematic-boom.wav` | Response finished |
-| `TaskCompleted` | `cash-register.mp3` | Ka-ching |
 
 ### Session Notes
 
@@ -42,7 +41,6 @@ claude-code-hooks/
 ├── sounds/
 │   ├── heart-beat.mp3
 │   ├── cinematic-boom.wav
-│   └── cash-register.mp3
 ├── .claude/
 │   └── hooks/
 │       ├── session-notes-wrapper.sh   # Captures stdin, backgrounds Python
